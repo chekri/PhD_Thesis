@@ -1,0 +1,14 @@
+clean()
+i=0
+A1=run(e='CTCR_3tubes',c='cur1')
+B1=run(A1('UZ5'),c='cur2')
+D1=run(B1('UZ3'),c='length1')
+E1=run(D1('UZ3'),c='load')
+F1=run(E1('UZ5'),c='length2')  #0.04-UZ5, 0.05- UZ10, F=0.1, UZ26,
+rpoints=F1("UZ")
+for solution in rpoints:
+	F1=F1+run(solution,c='rotate')
+	i=i+1
+save(F1,'surface1')
+clean()
+

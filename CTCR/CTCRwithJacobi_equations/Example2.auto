@@ -1,0 +1,14 @@
+clean()
+
+O=run(e='CTCRwithstability',c='basis')
+A1=run(O('UZ1'),c='cur1')
+B1=run(A1('UZ5'),c='cur2')
+C1=run(B1('UZ3'),c='cur3')
+D1=run(C1('UZ2'),c='length3') #L3= 0.3-UZ2,0.4-UZ4,0.5- UZ6
+E1=run(D1('UZ2'),c='length2') #L2= 0.5-UZ6,0.4-UZ4,0.3 -UZ2
+I1=run(E1('UZ6'),c='rotate3')
+
+J1=run(I1('UZ3'),c='rotate') # alpha3: 
+
+save(J1,'Example2')
+clean()

@@ -1,0 +1,16 @@
+clean()
+A1=run(e='CTCR_3tubes',c='cur1')
+B1=run(A1('UZ5'),c='cur2')
+C1=run(B1('UZ3'),c='cur3')
+D1=run(C1('UZ2'),c='length3')
+E1=run(D1('UZ5'),c='length2')
+F1=run(E1('UZ5'),c='length1')
+
+
+I1=run(F1('UZ6'),c='rotate3')
+J1=run(I1('UZ9'),c='rotate')
+G1=run(J1('UZ7'),c='load')
+H1=run(G1('UZ5'),c='rotateaboutbase') #5,27
+save(H1,'2fold')
+
+clean()
