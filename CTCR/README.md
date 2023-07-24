@@ -1,0 +1,1 @@
+To run any of the given files just type the command 'auto filname.auto'. Then, auto gives the continued solutions for required set of parameters and write the solutions as 's.xxxx', where xxx is outputfile name.
