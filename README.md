@@ -1,4 +1,3 @@
 # PhD_Thesis
-Codes used in my PhD thesis
-AUTO-07p is an easy to use software package. To install it 
-Unzip the .zip file and move to the folder. Then configure the files by .\configure . After the successful configuration, 'make all'
+Here are the codes used in my PhD thesis. These codes are wriiten in AUTO-07p, python and Matlab.
+AUTO-07p is an easy to use software package. To install this software package, unzip the provided auto.zip file and move to its parent folder. Then configure the files by .\configure . After the successful configuration, 'make all'
