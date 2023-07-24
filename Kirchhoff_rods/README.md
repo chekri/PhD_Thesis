@@ -1,1 +1,1 @@
-
+This folder consists of auto-codes used for the continued solutions for Kirchhoff rod problem. Type 'auto filename.auto' from the command line to carryout the contination. Python programs in 'Plotting_tools' folder plots the corresponding bifurcation plots 
