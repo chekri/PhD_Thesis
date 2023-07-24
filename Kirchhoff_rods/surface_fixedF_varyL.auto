@@ -1,0 +1,11 @@
+clean()
+i=0
+O=run(e='Kirchhoff_rod',c='cur1')
+B=run(O('UZ6'),c='load') #Specify teh loads by giving corresponding UZs  #Load cases  0.8-UZ3,  1.0-UZ5,  1.2-UZ7,  1.4-UZ11
+C=run(B('UZ7'),c='length') 
+rpoints=C("UZ")
+for solution in rpoints:
+	C=C+run(solution,c='loadrotate')
+	i=i+1
+save(C,'surface_fixedload')
+clean()

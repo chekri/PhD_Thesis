@@ -1,0 +1,11 @@
+clean()
+i=0
+O=run(e='Kirchhoff_rod',c='cur1')
+A=run(O('UZ6'),c='length') # l= 1.2 -UZ6 ,1.5-UZ11, 1.7 -UZ16 ,2.0 -UZ18
+C=run(A('UZ11'),c='load') #Specify the length by chaging to correspoding UZs # l= 1.2-UZ6, 1.5-UZ11, 1.7-UZ16, 2.0-UZ18
+rpoints=C("UZ")
+for solution in rpoints:
+	C=C+run(solution,c='loadrotate')
+	i=i+1
+save(C,'surface_fixed_length')
+clean()

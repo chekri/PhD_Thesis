@@ -1,0 +1,12 @@
+clean()
+i=0
+O=run(e='Kirchhoff_rod',c='basis')
+A=run(O('UZ1'),c='cur1')
+B=run(A('UZ6'),c='loadarm')
+C=run(B('UZ1'),c='length')
+D=run(C('UZ15'),c='load')   #13=1.6,12,14
+E=run(D('UZ13'),c='loadrotate')
+
+save(E,'conjugate_points_data')
+clean()
+

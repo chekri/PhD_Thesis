@@ -136,8 +136,8 @@
       ny=PAR(4)*COS(PAR(6))
      
       ! Arm of the load [e1,e2,e3]
-       e1=0.0d0
-       e2=PAR(7)
+       e2=0.0d0
+       e1=PAR(7)
        e3=0.00d0
    
      ! Director frame at the tip 
@@ -177,23 +177,21 @@
       FB(7)=U0(7) - COS(-PAR(5)/2)
 
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
-      ! Natural boundary conditions for position vector r and quaternion q at the free end s=L
+      ! Natural boundary conditions at the free end s=L
       ! Moment at the tip of the rod   
 
 
       FB(8)= ( U1(7)*U1(8) + U1(6)*U1(9) - U1(5)*U1(10) - U1(4)*U1(11))/2.0d0 +(e2*Ndir3 - e3*Ndir2)
       FB(9)= (-U1(6)*U1(8) + U1(7)*U1(9) + U1(4)*U1(10) - U1(5)*U1(11))/2.0d0 +(e3*Ndir1 - e1*Ndir3)!
       FB(10)=( U1(5)*U1(8) - U1(4)*U1(9) + U1(7)*U1(10) -U1(6)*U1(11))/2.0d0  +(e1*Ndir2 - e2*Ndir1)
-
+            
+      !Integral mu.q + 2 r.n =0  (Dichmann, Li, and Maddocks)
+      FB(11)=  U1(8)*U1(4) + U1(9)*U1(5)+ U1(10)*U1(6)+ U1(11)*U1(7) + 2.0d0*(U1(1)*U1(12) + U1(2)*U1(13) + U1(3)*U1(14)) 
+            
      ! Force at the tip of the rod
-      FB(11)=U1(12) + nx
-      FB(12)=U1(13) + ny
-      FB(13)=U1(14) + nz
-            
-      !Addtional BC from the integral mu.q + 2 r.n =0  (Dichmann, Li, and Maddocks)
-      FB(14)=  U1(8)*U1(4) + U1(9)*U1(5)+ U1(10)*U1(6)+ U1(11)*U1(7) + 2.0d0*(U1(1)*U1(12) + U1(2)*U1(13) + U1(3)*U1(14)) 
-            
-
+      FB(12)=U1(12) + nx
+      FB(13)=U1(13) + ny
+      FB(14)=U1(14) + nz
           
       RETURN
       END

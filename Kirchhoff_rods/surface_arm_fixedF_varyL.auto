@@ -1,0 +1,12 @@
+clean()
+i=0
+O=run(e='Kirchhoff_rod',c='cur1')
+A=run(O('UZ6'),c='loadarm')   # Change to UZ6 for obtaining index  2 equilibria # 0.01 - UZ1, 0.1-UZ2
+B=run(A('UZ1'),c='load')
+C=run(B('UZ7'),c='length')
+rpoints=C("UZ")
+for solution in rpoints:
+	C=C+run(solution,c='loadrotate')
+	i=i+1
+save(C,'surface_fixedload')
+clean()
