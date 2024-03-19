@@ -20,5 +20,5 @@ Second type of code pertains to the stability analysis of the CTCR equilibria an
 
 Third type of code is used for verifying the numerical behavior of the solutions by computing the conserved quantites of the CTCR system. Go to the folder named "CTCR/CTCRwithut_Stability/Conserved_qunatites" and run "auto data_for_conserved_quantites.auto" from terminal. It will generate a solution file corresponding to the continuation parameters specified in the script file. Run the python code "Conserved.py" followed by the generated data file to plot the conserved quantites along the solutions. The plots along the three sections are displayed in different subplots. The numerical parameters such as mesh size "NTST" and number of collocation points "NCOL" can be varied in the script file. Different cases of solutions can also be considered by varying the parameters inside it.
 
-$\textbf{Instructions for using the codes in the folder "Optimal_Control of CTCR"}$:
+$\textbf{Instructions for using the codes in the folder "Optimal Control of CTCR"}$:
 The optimiation codes are implemented in MatlabR2023b. Go to the folder and open the .m file which starts with optimize, for example
