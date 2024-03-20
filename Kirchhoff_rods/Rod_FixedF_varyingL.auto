@@ -2,10 +2,10 @@ clean()
 i=0
 O=run(e='Singlerod',c='cur1')
 B=run(O('UZ6'),c='load')
-C=run(B('UZ13'),c='length') #4,6,8,13
+C=run(B('UZ6'),c='length') # Tip load values Label 4:0.9 ,Label 6:1.09,  Label 8:1.25, Label 13:1.5
 rpoints=C("UZ")
 for solution in rpoints:
 	C=C+run(solution,c='loadrotate')
 	i=i+1
-save(C,'data')
+save(C,'data_varyL')
 clean()

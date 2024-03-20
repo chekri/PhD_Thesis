@@ -1,0 +1,9 @@
+clean()
+i=0
+O=run(e='Kirchhoff_rod',c='cur1',NTST=40,NCOL=4)
+A=run(O('UZ6'),c='loadarm',NTST=40,NCOL=4)
+B=run(A('UZ1'),c='length',NTST=40,NCOL=4)
+C=run(B('UZ14'),c='load',NTST=40,NCOL=4)#13=1.6,12,14
+D=run(C('UZ6'),c='loadrotate',NTST=40,NCOL=4)
+save(D,'data_for_conserved_quantities')
+clean()

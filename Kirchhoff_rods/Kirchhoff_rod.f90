@@ -23,8 +23,8 @@
 !	6: Load orientation
 !	7: Length of arm    
 
-      !Daroboux vector of the elastic rod
-      uhat1=PAR(1)!1.0d0
+      !Darboux vector of the elastic rod
+      uhat1=PAR(1)
       uhat2=0.0d0
       uhat3=PAR(2)
       
@@ -35,7 +35,7 @@
       ! Length of the elastic rod
       L1=PAR(3)
       
-     ! Calculate three components of moment in local coordnates   
+     ! Calculate three components of moment in local co-ordinates   
       m(1) = (u(7)*u(8) + u(6)*u(9) - u(5)*u(10) - u(4)*u(11))/2.0d0
       m(2) = (-u(6)*u(8) + u(7)*u(9) + u(4)*u(10) - u(5)*u(11))/2.0d0
       m(3) = (u(5)*u(8) - u(4)*u(9) + u(7)*u(10) - u(6)*u(11))/2.0d0
@@ -65,7 +65,7 @@
       strain(2) = m(2)/A1 + uhat2
       strain(3) = m(3)/C1 + uhat3  
 
-!     Hamiltonian from of the rod equilibria      
+!     Hamiltonian form of the rod equilibria      
 
       F(1) = L1*(d3(1))
       F(2) = L1*(d3(2))
@@ -76,8 +76,8 @@
       F(7) = L1*(-strain(1)*u(4)/2.0d0 - strain(2)*u(5)/2.0d0 - strain(3)*u(6)/2.0d0)
       F(8) = L1*(strain(1)*u(11)/2.0d0 - strain(2)*u(10)/2.0d0 + strain(3)*u(9)/2.0d0 -d3qn(1))
       F(9) = L1*(strain(1)*u(10)/2.0d0 + strain(2)*u(11)/2.0d0 - strain(3)*u(8)/2.0d0 -d3qn(2)) 
-      F(10) =L1*(-strain(1)*u(9)/2.0d0 + strain(2)*u(8)/2.0d0 + strain(3)*u(11)/2.0d0-d3qn(3))
-      F(11) =L1*(-strain(1)*u(8)/2.0d0 - strain(2)*u(9)/2.0d0 - strain(3)*u(10)/2.0d0-d3qn(4))
+      F(10) =L1*(-strain(1)*u(9)/2.0d0 + strain(2)*u(8)/2.0d0 + strain(3)*u(11)/2.0d0 -d3qn(3))
+      F(11) =L1*(-strain(1)*u(8)/2.0d0 - strain(2)*u(9)/2.0d0 - strain(3)*u(10)/2.0d0 -d3qn(4))
       F(12) =L1*0.0D0
       F(13) =L1*0.0D0
       F(14) =L1*0.0D0
@@ -94,9 +94,9 @@
       DOUBLE PRECISION, INTENT(IN) :: T
       DOUBLE PRECISION pi
       pi = 4.d0*ATAN(1.d0)
-      PAR(1)=0.0d0 		!uhat11
-      PAR(2)=0.0d0 		!uhat13
-      PAR(3)=0.00001d0          ! Length of the tube should be non-zero 
+      PAR(1)=0.0d0 		!uhat1
+      PAR(2)=0.0d0 		!uhat3
+      PAR(3)=0.00001d0          !Length of the tube should be non-zero 
       PAR(4)=0.0d0 
       PAR(5)=0.0d0 
       PAR(6)=0.0d0 
@@ -107,7 +107,7 @@
       ! Straight solution as an intial guess
       U(3)=PAR(1)*T
  	
-      ! Fixed orientation as an intial guess
+      ! Fixed orientation as an initial guess
       U(7)=1.0d0 
 
 !
@@ -136,8 +136,8 @@
       ny=PAR(4)*COS(PAR(6))
      
       ! Arm of the load [e1,e2,e3]
-       e2=0.0d0
        e1=PAR(7)
+       e2=0.0d0
        e3=0.00d0
    
      ! Director frame at the tip 
@@ -178,7 +178,7 @@
 
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
       ! Natural boundary conditions at the free end s=L
-      ! Moment at the tip of the rod   
+      ! Moment at the tip of the rod =0  
 
 
       FB(8)= ( U1(7)*U1(8) + U1(6)*U1(9) - U1(5)*U1(10) - U1(4)*U1(11))/2.0d0 +(e2*Ndir3 - e3*Ndir2)

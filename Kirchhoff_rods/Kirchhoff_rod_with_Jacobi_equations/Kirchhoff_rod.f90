@@ -25,7 +25,7 @@
 !	4: Tip Load
 !	5: Angle of the clamped end 
 !	6: Load orientation
-!	7: Basis (To provide intial guess for solutions, we perform continuation from 0 to 1 at s=l for Jacobi IVPs)
+!	7: Basis (To provide initial guess for solutions, we perform continuation from 0 vector to Identity (e) vector at s=l for Jacobi IVPs)
 
       !Daroboux vector of the elastic rod
       uhat1=PAR(1)
@@ -39,7 +39,7 @@
       ! Length of the elastic rod
       L1=PAR(3)
       
-     ! Calculate three components of moment in local coordnates   
+     ! Calculate three components of moment in local coordinates   
       m(1) = ( u(7)*u(8) + u(6)*u(9) - u(5)*u(10) - u(4)*u(11))/2.0d0
       m(2) = (-u(6)*u(8) + u(7)*u(9) + u(4)*u(10) - u(5)*u(11))/2.0d0
       m(3) = ( u(5)*u(8) - u(4)*u(9) + u(7)*u(10) - u(6)*u(11))/2.0d0

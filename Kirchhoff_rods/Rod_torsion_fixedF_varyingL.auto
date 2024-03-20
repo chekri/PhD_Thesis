@@ -1,0 +1,12 @@
+clean()
+i=0
+O=run(e='Kirchhoff_rod',c='cur1')
+A=run(O('UZ6'),c='twist')
+B=run(A('UZ1'),c='load')  # Change to UZ6 for obtaining index 2 equilibria # Label 1 0.01 ,Label2: 0.1
+C=run(B('UZ11'),c='length')
+rpoints=C("UZ")
+for solution in rpoints:
+	C=C+run(solution,c='loadrotate')
+	i=i+1
+save(C,'data_torsion_varyL')
+clean()

@@ -1,0 +1,12 @@
+clean()
+i=0
+O=run(e='Kirchhoff_rod',c='cur1')
+A=run(O('UZ6'),c='loadarm')  # Change to UZ6 for obtaining index  2 equilibria # 0.01 - UZ1, 0.1-UZ2
+B=run(A('UZ1'),c='length')
+C=run(B('UZ16'),c='load')  #Rod lengths:  Label 12: 1.5 , Label 13:1.6, Label 14:1.4 
+rpoints=C("UZ")
+for solution in rpoints:
+	C=C+run(solution,c='loadrotate')
+	i=i+1
+save(C,'data_arm_varyF')
+clean()

@@ -7,5 +7,5 @@ rpoints=C("UZ")
 for solution in rpoints:
 	C=C+run(solution,c='loadrotate')
 	i=i+1
-save(C,'Cdata2')
+save(C,'data_varyF')
 clean()

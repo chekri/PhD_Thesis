@@ -121,13 +121,13 @@ maxlen=0
 maxindex=0
 
 for i in range(0,len(LEN)):
-        if (len(THT[i])> maxlen):
-		maxlen=len(THT[i])
-		maxindex=i
-	for j in range(len(THT[i])):
-		XX.append(LEN[i])
-		YY.append(THT[i][j])
-		ZZ.append(UNF[i][j])
+    if (len(THT[i])> maxlen):
+        maxlen=len(THT[i])
+        maxindex=i
+    for j in range(len(THT[i])):
+        XX.append(LEN[i])
+        YY.append(THT[i][j])
+        ZZ.append(UNF[i][j])
 		
 dist=0.0
 length=0.0

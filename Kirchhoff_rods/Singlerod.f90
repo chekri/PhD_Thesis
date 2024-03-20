@@ -23,19 +23,19 @@
 !	6: Load orientation
 !	7: Length of arm    
 
-      !Daroboux vector of the elastic rod
-      uhat1=PAR(1)!1.0d0
+      !Darboux vector of the elastic rod
+      uhat1=PAR(1)
       uhat2=0.0d0
       uhat3=PAR(2)
       
-      ! Specify the bending stiffness A1 and Torsion stiffness C1
+      ! Specify the Bending stiffness A1 and Torsion stiffness C1
       A1=1.0
       C1=1.0/1.3
      
       ! Length of the elastic rod
       L1=PAR(3)
       
-     ! Calculate three components of moment in local coordnates   
+     ! The three components of the moment in local coordinates   
       m(1) = (u(7)*u(8) + u(6)*u(9) - u(5)*u(10) - u(4)*u(11))/2.0d0
       m(2) = (-u(6)*u(8) + u(7)*u(9) + u(4)*u(10) - u(5)*u(11))/2.0d0
       m(3) = (u(5)*u(8) - u(4)*u(9) + u(7)*u(10) - u(6)*u(11))/2.0d0
@@ -104,10 +104,10 @@
 	  
       U= 0.0d0
       
-      ! Straight solution as an intial guess
+      ! Straight solution as an initial guess
       U(3)=PAR(1)*T
  	
-      ! Fixed orientation as an intial guess
+      ! Fixed orientation as an initial guess
       U(7)=1.0d0 
 
 !
@@ -178,14 +178,14 @@
 
       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!	
       ! Natural boundary conditions for position vector r and quaternion q at the free end s=L
-      ! Moment at the tip of the rod   
+      ! Moment-balance at the tip of the rod   
 
 
       FB(8)= ( U1(7)*U1(8) + U1(6)*U1(9) - U1(5)*U1(10) - U1(4)*U1(11))/2.0d0 +(e2*Ndir3 - e3*Ndir2)
-      FB(9)= (-U1(6)*U1(8) + U1(7)*U1(9) + U1(4)*U1(10) - U1(5)*U1(11))/2.0d0 +(e3*Ndir1 - e1*Ndir3)!
+      FB(9)= (-U1(6)*U1(8) + U1(7)*U1(9) + U1(4)*U1(10) - U1(5)*U1(11))/2.0d0 +(e3*Ndir1 - e1*Ndir3)
       FB(10)=( U1(5)*U1(8) - U1(4)*U1(9) + U1(7)*U1(10) -U1(6)*U1(11))/2.0d0  +(e1*Ndir2 - e2*Ndir1)
 
-     ! Force at the tip of the rod
+     ! Force-balance at the tip of the rod
       FB(11)=U1(12) + nx
       FB(12)=U1(13) + ny
       FB(13)=U1(14) + nz
