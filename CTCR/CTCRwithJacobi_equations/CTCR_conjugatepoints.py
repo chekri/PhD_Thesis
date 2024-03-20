@@ -1,15 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import sys
 import numpy as np
 from numpy import array
 import string
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
-
 
 filename=sys.argv[1]
+#filename="s.Example1"
 f=open(filename,"r")
 PQ1=[]
 PQ2=[]
@@ -45,7 +42,7 @@ DDDY3=[]
 
 SOLL=[]
 
-No=198/7 + 1
+No=int(198/7) + 1
 while(1):
     dalf=[]
     Dt=[]
@@ -66,7 +63,7 @@ while(1):
         Bb=B.split()
         #print B
         Bb=np.array(Bb)
-        Bb=Bb.astype(np.float)
+        Bb=Bb.astype(float)
         dy1=[]
         dy2=[]
         dy3=[]
@@ -145,8 +142,7 @@ while(1):
     DDY2=[]
     DDY3=[]
     Q=[]                                               
-print "Successfully Loaded solutions";
-#print Pq1
+print("Successfully Loaded solutions");
 
 DT3=[]
 DT2=[]
@@ -157,8 +153,6 @@ DET3=[]
 St=[]
 St1=[]
 QQ[0][1];
-print len(QQ)
-print len(QQ[0])
 for i in range(0,len(DDDY1)):
     for j in range(0,len(DDDY1[i])):
 ###############################################################        
@@ -199,7 +193,7 @@ for i in range(0,len(DDDY1)):
     DET2=[]
     DET1=[]
     DET3=[]
-print "Successful Computation!!!"
+print("Successful Computation!!!")
 
 
 Datax=[]
@@ -232,12 +226,21 @@ for k in range(0,len(DT1),1):
     plt.plot(plotx,ploty,'r')
     plt.plot(plotxx,plotyy,'g')
     plt.plot(plotxxx,plotyyy,'b')
+plt.xlabel('Length of the robot (X100 mm)')
+plt.ylabel('Determinant of the stability matrix')
 plt.grid()
 plt.show()
 
 
 #Choose a solution
-k=24
+if len(sys.argv)==2:
+    k=20 #default value of 20. It can be changed to any available label
+else:
+    k=int(sys.argv[2])
+        
+
+#k=int(k)
+
 plotx=[]
 ploty=[]
 plotxx=[]
@@ -256,9 +259,8 @@ plt.ylabel('Determinant of the stability matrix')
 plt.plot(plotx,ploty,'r')
 plt.plot(plotxx,plotyy,'g')
 plt.plot(plotxxx,plotyyy,'b')
+print('Conjugate points for the solution labelled ' + str(k))
+print ('Value of determinant at s=0 is ')
+print(plotyyy[0])
 plt.grid()
 plt.show()
-
-
-
-

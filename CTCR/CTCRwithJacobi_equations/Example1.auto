@@ -1,11 +1,11 @@
 clean()
-
+#Labels are set in the constants file (c.filename)
 O=run(e='CTCRwithstability',c='basis')
 A1=run(O('UZ1'),c='cur1')
 B1=run(A1('UZ5'),c='cur2')
 D1=run(B1('UZ3'),c='length1')
 E1=run(D1('UZ3'),c='length2')
-J1=run(E1('UZ8'),c='rotate')  # L2=0.4-UZ4,0.6-UZ6,0.7-UZ8, 0.75-UZ9
+J1=run(E1('UZ9'),c='rotate')  # Labels correspondence to L2: UZ4:0.4, UZ6:0.6, UZ8:0.7, UZ9:0.75
 
 save(J1,'Example1')
 clean()

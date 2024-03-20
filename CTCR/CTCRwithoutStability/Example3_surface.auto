@@ -15,5 +15,5 @@ rpoints=G1("UZ")
 for solution in rpoints:
 	G1=G1+run(solution,c='rotateaboutbase')
 	i=i+1
-save(G1,'Example3_surf')
+save(G1,'surface3')
 clean()

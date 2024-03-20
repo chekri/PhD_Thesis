@@ -7,9 +7,9 @@
       DOUBLE PRECISION, INTENT(IN) :: U(NDIM), PAR(*)
       DOUBLE PRECISION, INTENT(OUT) :: F(NDIM)
       DOUBLE PRECISION, INTENT(INOUT) :: DFDU(NDIM,NDIM), DFDP(NDIM,*)
-      DOUBLE PRECISION epsilon,entry11,entry12,entry13,entry14,k21,k22,k23,k11,k12,k13
+      DOUBLE PRECISION entry11,entry12,entry13,entry14,k21,k22,k23,k11,k12,k13
       DOUBLE PRECISION ubar11,ubar12,ubar13,A1,A2,C1,C2,addterm21
-      DOUBLE PRECISION pi,L1,L2,L3,aa1,aa2,aa3,ab1,ab2,ab3
+      DOUBLE PRECISION pi,L1,L2,L3,ab1,ab2,ab3
       DOUBLE PRECISION kb31,kb32,kb33,ub31,ub32,ub33,entry31,entry32,entry33,entry34,A3,C3
       DOUBLE PRECISION m1(3),strain1(3),d11(3),d12(3),d13(3),v1(3),d11qn(4),d12qn(4),d13qn(4)
       DOUBLE PRECISION m2(3),strain2(3),d21(3),d22(3),d23(3),v2(3),d21qn(4),d22qn(4),d23qn(4)
@@ -18,19 +18,20 @@
       DOUBLE PRECISION ater1,ater2,entry21,entry22,entry23,entry24
 
 
-      uhat11=PAR(5)!1.0d0
+! Intrinsic curvatures of the constitute tubes 
+      uhat11=PAR(5)
       uhat12=0.0d0
       uhat13=PAR(3)
       
-      uhat21=PAR(6)!2.0d0
+      uhat21=PAR(6)
       uhat22=0.0d0
       uhat23=PAR(3)
 
-      uhat31=PAR(11)!2.0d0
+      uhat31=PAR(11)
       uhat32=0.0d0
       uhat33=PAR(3)
       
-  
+    !Bending and Torsion stiffnesses of the constitute tubes from ()
      A1=0.03487
      A2=0.09422
      A3=3.4
@@ -38,22 +39,22 @@
      C2=A2/1.3
      C3=A3/1.3
      
-     
+   !Lengths of the CTCR sections  
      L2=PAR(1)
      L1=PAR(4)
      L3=PAR(10)
       
 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    Governing equations corresponding to 3-tube section   
+
       k21=A1+A2
       k22=A1+A2
-      k23=C1+C2  
+      k23=C1+C2     
 
 
-    epsilon = 0.0d0
-    aa1=1000.0d0
-    aa2=1000.0d0
-    aa3=1000.0d0
-   
       m2(1) = (u(7)*u(8) + u(6)*u(9) - u(5)*u(10) - u(4)*u(11))/2.0d0
       m2(2) = (-u(6)*u(8) + u(7)*u(9) + u(4)*u(10) - u(5)*u(11))/2.0d0
       m2(3) = (u(5)*u(8) - u(4)*u(9) + u(7)*u(10) - u(6)*u(11))/2.0d0
@@ -89,9 +90,7 @@
       strain2(1) = m2(1)/k21 + ubar21
       strain2(2) = m2(2)/k22 + ubar22
       strain2(3) = m2(3)/k23 + ubar23  
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!    2-tube section    
+
 
       F(1) = L2*(d23(1))
       F(2) = L2*(d23(2))
@@ -116,7 +115,7 @@
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!    1-tube section          
+!    Governing equations corresponding to 1-tube section         
       ubar11=uhat11
       ubar12=uhat12
       ubar13=uhat13
@@ -178,7 +177,7 @@ F(27)=L1*(-strain1(1)*u(24)/2.0d0- strain1(2)*u(25)/2.0d0-strain1(3)*u(26)/2.0d0
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!   3-tube section     
+!  Governing equations corresponding to 3-tube section     
       
       m3(1) = ( u(23+14)*u(24+14) + u(22+14)*u(25+14) - u(21+14)*u(26+14) - u(20+14)*u(27+14))/2.0;
       m3(2) = (-u(22+14)*u(24+14) + u(23+14)*u(25+14) + u(20+14)*u(26+14) - u(21+14)*u(27+14))/2.0;
@@ -191,7 +190,7 @@ F(27)=L1*(-strain1(1)*u(24)/2.0d0- strain1(2)*u(25)/2.0d0-strain1(3)*u(26)/2.0d0
       entry31 =  2.0*(u(20+14)*u(28+14) + u(21+14)*u(29+14) + u(22+14)*u(30+14));
       entry32 =  2.0*(u(21+14)*u(28+14) - u(20+14)*u(29+14) + u(23+14)*u(30+14));
       entry33 =  2.0*(u(22+14)*u(28+14) - u(23+14)*u(29+14) - u(20+14)*u(30+14));
-      entry34 =  2.0*(u(23+14)*u(28+14) + u(22+14)*u(29+14) - u(21+14)*u(30+14));!%Done
+      entry34 =  2.0*(u(23+14)*u(28+14) + u(22+14)*u(29+14) - u(21+14)*u(30+14));
 
 
 !%       Components of D_3[q] n
@@ -274,8 +273,8 @@ F(27)=L1*(-strain1(1)*u(24)/2.0d0- strain1(2)*u(25)/2.0d0-strain1(3)*u(26)/2.0d0
       DOUBLE PRECISION, INTENT(IN) :: T
       DOUBLE PRECISION k1,k2,k3,ubar1,ubar2,pi
       pi = 4.d0*ATAN(1.d0)
-      PAR(1)=0.0001d0 		!uhat11
-      PAR(2)=0.0d0 		!uhat13
+      PAR(1)=0.0001d0 		
+      PAR(2)=0.0d0 		
       PAR(3)=0.0d0
       PAR(4)= 0.0001d0 
       PAR(5)= 0.0d0
