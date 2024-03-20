@@ -2,8 +2,8 @@ clean()
 i=0
 O=run(e='Kirchhoff_rod',c='cur1')
 A=run(O('UZ6'),c='twist')
-B=run(A('UZ1'),c='length') # Change to UZ6 for obtaining index  2 equilibria # Label 1: 0.01, Label 6:0.1
-C=run(B('UZ16'),c='load')
+B=run(A('UZ1'),c='length') 
+C=run(B('UZ13'),c='load') #change label to UZ16 to obtain index  2 equilibria
 rpoints=C("UZ")
 for solution in rpoints:
 	C=C+run(solution,c='loadrotate')

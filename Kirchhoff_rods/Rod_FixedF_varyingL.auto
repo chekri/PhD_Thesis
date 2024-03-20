@@ -1,6 +1,6 @@
 clean()
 i=0
-O=run(e='Singlerod',c='cur1')
+O=run(e='Kirchhoff_rod',c='cur1')
 B=run(O('UZ6'),c='load')
 C=run(B('UZ6'),c='length') # Tip load values Label 4:0.9 ,Label 6:1.09,  Label 8:1.25, Label 13:1.5
 rpoints=C("UZ")

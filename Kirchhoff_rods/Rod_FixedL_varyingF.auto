@@ -1,6 +1,6 @@
 clean()
 i=0
-O=run(e='Singlerod',c='cur1')
+O=run(e='Kirchhoff_rod',c='cur1')
 A=run(O('UZ6'),c='length')
 C=run(A('UZ11'),c='load')#11,16,18
 rpoints=C("UZ")
