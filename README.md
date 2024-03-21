@@ -47,6 +47,7 @@ Third type of code is used for verifying the numerical behavior of the solutions
 ## Instructions for using the codes in the folder "Optimal Control of CTCR":
 
 The optimiation codes are implemented in MatlabR2023b.This folder contains codes correspoding to three kind of examples discussed in the chapter 10 of the dissertation, namely
+
 1.**Example1**: Examples pertaining to the section "Minimimum Working volume:.
 2.**Example2**: Examples pertaining to the section "Fixed Tip Orientation with adjustable Position"
 3.**Example3**: Examples pertaining to the section "Fixed Tip Position with adjustable Orientation"
