@@ -48,8 +48,8 @@ Third type of code is used for verifying the numerical behavior of the solutions
 
 The optimiation codes are implemented in MatlabR2023b.This folder contains codes correspoding to three kind of examples discussed in the chapter 10 of the dissertation, namely
 
-1.**Example1**: Examples pertaining to the section "Minimimum Working volume:.
-2.**Example2**: Examples pertaining to the section "Fixed Tip Orientation with adjustable Position"
-3.**Example3**: Examples pertaining to the section "Fixed Tip Position with adjustable Orientation"
+1. **Example1**: Examples pertaining to the section "Minimimum Working volume"
+2. **Example2**: Examples pertaining to the section "Fixed Tip Orientation with adjustable Position".
+3. **Example3**: Examples pertaining to the section "Fixed Tip Position with adjustable Orientation".
 
 Naviagte to any folder and open the .m file which starts with optimize,s uch as "Optimize_path_alongpath.m" or "Optimize_path_sweep_area.m" , Then, run the command with with Optimize_path_alongpath([]) to start the optimization implementation. It can also be started from a solution from previous run. In that case, run "Optimize_path_alongpath(prev_solution)". The parameters can be set and varied inside this code. Once, the computation is successful, run "Animate(output)" to postprocess the results. The evolution of CTCR configurations during the optimization process, evolution of control paramters and some relevant functions are displyed in this run.  
