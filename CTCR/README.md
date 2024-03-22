@@ -1,4 +1,4 @@
-This folder contains the codes used for implementng the examples in Chapter 7. To implement continuation, just run any of the given script files by running the command 'auto filname.auto'. Auto computes the solutions for the given set of parameters (set in constant files c.files) and outputs the solutions as 's.xxx', where xxx is outputfile name. Use the provided python commands to plot the bifucation plots. The folder "CTCRwithoutStability" includes four auto script files, each generates solutions with different set of paramters.
+This folder contains the codes used for implementing the examples in Chapter 7. To implement continuation, just run any of the given script files by running the command 'auto filename.auto'. Auto computes the solutions for the given set of parameters (set in constant files c.files) and outputs the solutions as 's.xxx', where xxx is the output file name. Use the provided Python commands to plot the bifurcation plots. The folder "CTCRwithoutStability" includes four auto script files, each generating solutions with a different set of parameters.
 
 1.***Example1_surface.auto***: Continuation when $\alpha^{[2]}_{o}$ is varied for different section lengths $L_{2}$.(section 7.1.2 of thesis)
 
@@ -19,7 +19,9 @@ The folder "CTCRwithJacobi_equations" includes 4 script files
 
 4.***Example3.auto***: (section 7.2.2 of thesis)
 
-These scripts generate solutions conssiting of both CTCR equilibria and the corresponding Jacobi equations. The Python code "CTCR_conjugatepoints.py" computes the conjugate points from this solution files and plots the conjugate point computations. 
+These scripts generate solutions consisting of both CTCR equilibria and the corresponding Jacobi equations. The Python code "CTCR_conjugatepoints.py" computes the conjugate points from this solution files and plots the conjugate point computations. 
+
+The folder "CTCRwithoutStability/Conserved_quantities" contains codes for verifying the convergence of the numerical solutions (section 7.3). The auto script files generate the solutions. The Python code "Conserved.py" computes the conserved quantities such as Hamiltonian, the norm of the quaternion, and $\mu \cdot \mathbf{q} + 2 \mathbf{r} \cdot \mathbf{n} $ along different sections of the tubes.
 
 
 
