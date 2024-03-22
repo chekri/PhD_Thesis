@@ -1,46 +1,61 @@
 function [p3,p2,p1,t3,t2,t1]=IVP_trajectory(IC,C)
+%Outputs:    the CTCR configuration for the given initial conditions IC at root
+%            s=0 and control paramters C.Facilitates easy gradient computations 
+%            by avoiding time consuming BVP computations
+%
+%p3,p2,p1 are the array of position vectors of CTCR corresponding to
+%Three-tube section, Two-tube section and one-tube section. 
+%t3,t2,t1 are arclength parameters corresponding to corresponding to
+%Three-tube section, Two-tube section and one-tube section
+%Make sure to change the system parameters such as intrinsic curvatures and
+%stiffnesses of the tubes if there are any changes.
 Th1=C(1);
 Th2=C(2);
 Th3=C(3);
 L1=C(4);
 L2=C(5);
 L3=C(6);
+%% System Paramters for tubes in CTCR
+%Intrinisic curvatures of the tubes in CTCR
+uhat11=0.5;
+uhat12=0.0;
+uhat13=0.0;
+      
+uhat21=0.8;
+uhat22=0.0;
+uhat23=0.0;
+
+uhat31=1.0;
+uhat32=0.0;
+uhat33=0.0;
+
+%Stiffnesses of the tubes in CTCR
+A1=1.0;
+A2=1.2;
+A3=1.4;
+C1=A1/1.3;
+C2=A2/1.3;
+C3=A3/1.3;
 
 IC3=IC;
 IC3(6)=sin(Th1/2);
 IC3(7)=cos(Th1/2);
 IC3(15)=Th2-Th1;
 IC3(17)=Th3-Th1;
-[t3,p3]=ode45(@(x,y) three_tubesection(x,y,L1,L2,L3),[0 1],IC3);
+
+[t3,p3]=ode45(@(x,y) three_tubesection(x,y,L1,L2,L3,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3),[0 1],IC3);
 sol_0=p3(end,:);
-%size(p3)
+
 IC2=sol_0(1:16);
-[t2,p2]=ode45(@(x,y) two_tubesection(x,y,L1,L2,L3),[0 1],IC2);
+[t2,p2]=ode45(@(x,y) two_tubesection(x,y,L1,L2,L3,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3),[0 1],IC2);
 sol_0=p2(end,:);
-%size(p2)
+
 IC1=sol_0(1:14);
-[t1,p1]=ode45(@(x,y) one_tubesection(x,y,L1,L2,L3),[0 1],IC1);
-%size(p1)
+[t1,p1]=ode45(@(x,y) one_tubesection(x,y,L1,L2,L3,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3),[0 1],IC1);
 
-function F = three_tubesection(x,u,L1,L2,L3)
-      uhat11=0.5;%PAR(5)%1.0
-      uhat12=0.0;
-      uhat13=0.0;%PAR(3)
-      
-      uhat21=0.8;%PAR(6)%2.0
-      uhat22=0.0;
-      uhat23=0.0;%PAR(3)
 
-      uhat31=1.0;%2.0
-      uhat32=0.0;
-      uhat33=0.0;%PAR(3)
-  
-     A1=1.0;
-     A2=1.2;
-     A3=1.4;
-     C1=1.0/1.3;
-     C2=1.2/1.3;
-     C3=A3/1.3;
+function F = three_tubesection(x,u,L1,L2,L3,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3)
+    
            	
     epsilon = 0.0;
     aa1=1000.0;
@@ -112,7 +127,7 @@ function F = three_tubesection(x,u,L1,L2,L3)
 
     ub31=(A1*uhat11 + A2*(uhat21*cos(u(15))- uhat22*sin(u(15)) ) + A3*(uhat31*cos(u(17))- uhat32*sin(u(17))))/(A1+A2+A3);
 	ub32=(A1*uhat12 + A2*(uhat21*sin(u(15))+ uhat22*cos(u(15)) ) + A3*(uhat31*sin(u(17))+ uhat32*cos(u(17))))/(A1+A2+A3);
-	ub33= (ab1 + ab2 + C1*uhat13)/(C1+C2+C3);% Corrected addterm to uhat13 ------------------------
+	ub33= (ab1 + ab2 + C1*uhat13)/(C1+C2+C3);
 
 
 	kb31=A1+A2+A3;
@@ -140,37 +155,15 @@ function F = three_tubesection(x,u,L1,L2,L3)
 	F(12) = L3*0.0;
 	F(13) = L3*0.0;
 	F(14) = L3*0.0;
-   	F(15)= L3*((u(16) + u(18))/C1 - m3(3)/C1  + u(16)/C2 + uhat23- uhat13);  %%%Alfa2=u(15)
+   	F(15)= L3*((u(16) + u(18))/C1 - m3(3)/C1  + u(16)/C2 + uhat23- uhat13);  
 	F(16)= L3*(A2*uhat21*(A3*uhat31*sin(u(15)-u(17)) + A1*uhat11*sin(u(15))))/(A1+A2+A3) + L3*A2*uhat21*(m3(1)*sin(u(15)) - m3(2)*cos(u(15)))/(A1+A2+A3);
     
-    F(17)= L3*((u(16) + u(18))/C1 - m3(3)/C1  + u(18)/C3 + uhat33- uhat13);  %%%Alfa3=u(17)
+    F(17)= L3*((u(16) + u(18))/C1 - m3(3)/C1  + u(18)/C3 + uhat33- uhat13);  
 	F(18)= L3*(A3*uhat31*(A2*uhat21*sin(u(17)-u(15)) + A1*uhat11*sin(u(17))))/(A1+A2+A3) + A3*L3*uhat31*(m3(1)*sin(u(17)) - m3(2)*cos(u(17)))/(A1+A2+A3);
     F=F(:);
     
-    function F=two_tubesection(x,u,L1,L2,L3) 
-      uhat11=0.5;%PAR(5)%1.0
-      uhat12=0.0;
-      uhat13=0.0;%PAR(3)
-      
-      uhat21=0.8;%PAR(6)%2.0
-      uhat22=0.0;
-      uhat23=0.0;%PAR(3)
-
-      uhat31=1.0;%2.0
-      uhat32=0.0;
-      uhat33=0.00;%PAR(3)
-  
-     A1=1.0;
-     A2=1.2;
-     A3=1.4;
-     C1=1.0/1.3;
-     C2=1.2/1.3;
-     C3=A3/1.3;
+    function F=two_tubesection(x,u,L1,L2,L3,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3) 
            	
-    epsilon = 0.0;
-    aa1=1000.0;
-    aa2=1000.0;
-    aa3=1000.0;
     epsilon = 0.0;
     aa1=1000.0;
     aa2=1000.0;
@@ -270,18 +263,7 @@ function F = three_tubesection(x,u,L1,L2,L3)
       F=F(:);
 
       
-function F=one_tubesection(x,u,L1,L2,L3)
-      uhat11=0.5;%PAR(5)%1.0
-      uhat12=0.0;
-      uhat13=0.0;%PAR(3)
-      
-  
-     A1=1.0;
-     A2=1.2;
-     A3=1.4;
-     C1=A3/1.3;
-     C2=A2/1.3;
-     C3=A3/1.3;
+function F=one_tubesection(x,u,L1,L2,L3,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3)
       
       ubar11=uhat11;
       ubar12=uhat12;
@@ -291,10 +273,10 @@ function F=one_tubesection(x,u,L1,L2,L3)
       k12=A1;
       k13=C1;
     
-      epsilon = 0.0;
-    aa1=1000.0;
-    aa2=1000.0;
-    aa3=1000.0;
+     epsilon = 0.0;
+     aa1=1000.0;
+     aa2=1000.0;
+     aa3=1000.0;
       m1(1) = (u(7)*u(8) + u(6)*u(9) - u(5)*u(10) - u(4)*u(11))/2.0;
       m1(2) = (-u(6)*u(8) + u(7)*u(9) + u(4)*u(10) - u(5)*u(11))/2.0;
       m1(3) = (u(5)*u(8) - u(4)*u(9) + u(7)*u(10) - u(6)*u(11))/2.0;
@@ -355,7 +337,9 @@ function F=one_tubesection(x,u,L1,L2,L3)
       strain1(2) = m1(2)/k12 + uhat12;
       strain1(3) = m1(3)/k13 + uhat13;
       
-
+     % strain1(1) = strain2(1)
+     % strain1(2) = strain2(2)
+     % strain1(3) = strain2(3)
 %       Now calculate the right hand sides
 %       Additional terms      
      
@@ -374,6 +358,4 @@ function F=one_tubesection(x,u,L1,L2,L3)
       F(13) = L1*0.0;
       F(14) = L1*0.0;
        F=F(:);
-        
-    
-  
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
