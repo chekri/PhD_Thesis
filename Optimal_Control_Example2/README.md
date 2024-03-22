@@ -6,4 +6,4 @@ This folder contains the codes used for optimization in Example 2 (Section: "Fix
 
 3.***Example2c***: CTCR manuveur to a farther target point with its orientation constrained by path constraints.
 
-Navigate to any folder and open the 
+Navigate to any folder and open the "Optimize_follow_path.m" file and run "Optimize_follow_path([])" in command window
