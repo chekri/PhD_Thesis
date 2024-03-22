@@ -1,23 +1,16 @@
+# Plotting tool for generating bifurcation surfaces for the continuation solutions. 
+# This code is meant to work only with the solution files which have fixed Length parameter. If it is run with the solution files having fixed Load parameter, it generates an error.
+# In that case, run the files with other python code in this folder
+
 import numpy as np
 import sys
-import numpy as np
-from numpy import array
-import string
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import axes3d
-import matplotlib.pyplot as plt
-import matplotlib.tri as mtri
-import matplotlib.tri as mtri
 from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-from matplotlib import rc
 from scipy.interpolate import interp1d
-from scipy.optimize import newton
 from numpy import interp
 
 filename=sys.argv[1]
 f=open(filename,"r")
-
 
 LEN=[]
 le=0.2

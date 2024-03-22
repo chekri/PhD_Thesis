@@ -1,9 +1,11 @@
+#This code computes the conjugate points from the solutions of the Jacobi equations and displayes them
+# You can choose the label of the solution for which you wish to see the conjugate points. You also can give the label when you run the code
+# For example "python3 CTCR_conjugatepoints.py s.solutionfilename 59" displays the conjugate points corresponding to the label 59.  
+# The labels and their properties are usually monitored  in the command window when running the auto codes.
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-import numpy as np
-from numpy import array
-import string
+
 
 filename=sys.argv[1]
 #filename="s.Example1"

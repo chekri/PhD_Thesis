@@ -1,13 +1,14 @@
+# This tool computes the conjugate points from the given solutons of the Jacobi equations in the solution files and displays them
+# In the end, you can specify the labels  of equilibria for which the conjugate points are needed to be displayed.,s
+# The labels and their properties are usually monitored in the command window when running the auto code 
+
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import sys
-from numpy import array
-import string
-import matplotlib.gridspec as gridspec
+
 
 filename="s.conjugate_points_data"
 f=open(filename,"r")
+
 PQ1=[]
 PQ2=[]
 PQ3=[]
@@ -94,7 +95,6 @@ print("Successfully Loaded solutions");
 
 
 
-
 #########################################
 #Compute the determinant of the "Stability Matrix"
 DT=[]
@@ -135,9 +135,11 @@ for k in range(0,len(DT1),5):
 plt.grid()
 plt.show()
 
+#Specify here the range of the labes of the solutions for which conjugate points should be displayed
+LOW_LAB=268 # Lower Range
+UP_LAB= 290 # Upper Range
 
-
-for k in range(263,285,5):
+for k in range(LOW_LAB,UP_LAB,1):
     plotxx=[]
     plotyy=[]
     for i in range(0,len(DT1[k])):
