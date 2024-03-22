@@ -1,8 +1,9 @@
 This folder consists of codes used in Example 1 in the chapter 10, which model the CTCR manueveur such that its tip reaches a specified target point using minimum working volume.
-**Example1_Deviation_from_FTL**: Optimization uses "Deviation_from_FTL" objective and uses gradients evaluated by finite differences.
-**Example1_sweep_area**: Optimization uses "Sweep area" objective and uses gradients evaluated by finite differences.
-**Example1_Automatic_Diffferentiation**: Optimization uses "Deviation_from_FTL" objective and uses gradients evaluated by Automatic differentiation.
 
+ **Example1_Deviation_from_FTL**: Optimization uses "Deviation_from_FTL" objective and uses gradients evaluated by finite differences.
+ **Example1_sweep_area**: Optimization uses "Sweep area" objective and uses gradients evaluated by finite differences.
+ differentiation.
+ **Example1_restricting_length_controls**: 
 
 
 
