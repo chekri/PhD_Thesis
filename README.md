@@ -48,7 +48,7 @@ The third type of code is used for verifying the numerical behavior of the solut
 
 The optimiation codes are implemented in MatlabR2023b. This folder contains codes corresponding to three kinds of examples discussed in chapter 10 of the dissertation, namely
 
-1. **Example1**: Examples in the section "Minimum Working volume"
+1. **Example1**: Examples in the section "Minimum Working volume".
 2. **Example2**: Examples in the section "Fixed Tip Orientation with adjustable Position".
 3. **Example3**: Examples in the section "Fixed Tip Position with adjustable Orientation".
 
