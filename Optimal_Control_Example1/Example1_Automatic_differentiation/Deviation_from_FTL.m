@@ -1,9 +1,11 @@
 function [earea,Jac_area]=Deviation_from_FTL(U,Tr,UFL,TrF,J,Fc)
-%TrF=%FTL
-%Tr=%Normal Function
-% perturbation for finite differences
-%Length intervals
-%tic
+% Outputs :   The deviation from FTL objective and its gradient (auto-differentiation)
+%             with respect to the control variables U
+% Arguments: U Control Parameters
+%          : Tr The configuration of the CTCR (Its shape (X,Y,Z) in 3D space)
+%          : UFL Follow the Leader control parameters for the given problem
+%          : TrF The "Follow the Leader" configuration of the CTCR for the given UFL parameters  (Its shape (X,Y,Z) in 3D space)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 t1=TrF{6};
 t2=TrF{5};
 t3=TrF{4};
@@ -11,8 +13,8 @@ l1= U(4);
 l2= U(5);
 l3= U(6);
 %Length controls
-L1f =UFL(4)+0.99;%0.4
-L2f =UFL(5);%0.75
+L1f =UFL(4)+0.99;
+L2f =UFL(5);
 L3f =UFL(6);
 % Arclength Steps.. FTL Robot's config
 Al=[L3f*t3', L3f + L2f*t2', L3f + L2f + L1f*t1'];   
@@ -36,9 +38,6 @@ Al(del_index)=[];
 XF(del_index)=[];  
 YF(del_index)=[];
 ZF(del_index)=[];
-%figure(1)
-%plot3(XF,YF,ZF,'k-o')
-%hold on
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Initial state (state at s=0) from the solutions of CTCR-bvp solutions.
 %Useful for computing gradients
@@ -47,28 +46,6 @@ XX=[Tr.y(31,:),Tr.y(1,:),Tr.y(17,:)];
 YY=[Tr.y(32,:),Tr.y(2,:),Tr.y(18,:)];
 ZZ=[Tr.y(33,:),Tr.y(3,:),Tr.y(19,:)];
 l =[l3*s,l3 + l2*s, l3 + l2 + l1*s];
-%{
-NN=size(s,2)
-XX(NN)=[];   
-YY(NN)=[];
-ZZ(NN)=[];
-l(NN)=[];
-
-XX(2*NN)=[];   
-YY(2*NN)=[];
-ZZ(2*NN)=[];
-l(2*NN)=[];
-
-plot3(XX,YY,ZZ,'r-x')
-%}
-%Solutions of the IVP with the prescribed control parameters and intial
-%state
-
-%[p3,p2,p1,t3,t2,t1]=IVP_trajectory(IC',U);
-%l1=U(4);
-%l2=U(5);
-%l3=U(6);
-%l =[l3*t3',l3 + l2*t2', l3 + l2 + l1*t1'];       % Arclength Steps alson the Robot.
 
 %Interpolation of the robots FTL's position vector in terms of its arclength.
 xf=interp1(Al,XF,'spline','pp');
@@ -122,38 +99,21 @@ zvs=ppval(zf,ll);
 (yvs - ys)/ee-grad_y3;
 (zvs - zs)/ee-grad_z3;
 
-
-%{
-plot3(xs,ys,zs,'k-x')
-%FTL's position vectors along the arclength projection of the current robot's configuration. 
-for k=1:size(l,2)
-    figure(1)
-    plot3([xs(k),XX(k)],[ys(k),YY(k)],[zs(k),ZZ(k)],'g')
-    figure(2)
-    scatter(l(k),norm([xs(k),ys(k),zs(k)]-[XX(k),YY(k),ZZ(k)]),'r')
-    hold on
-    grid on
-end
-%}
 AA=[xs;ys;zs];
 B=[XX;YY;ZZ];
-%B=[p3(:,1)',p2(:,1)',p1(:,1)';p3(:,2)',p2(:,2)',p1(:,2)';p3(:,3)',p2(:,3)',p1(:,3)'];
-%The area of the devaition from the FTL shape 
-earea=enclosed_area1(AA,B,l);
+%The area of the devaition from the FTL shape and the gradients with respect
+%to the state variables
 [earea,Jac_area,JC]=enclosed_area(AA,B,l,Rfu1,Rfu2,Rfu3);
 
+%Adjoint Gradiet Method
 lam = linsolve(J',Jac_area);
 Jac_area=-lam'*Fc + JC ;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-function area=enclosed_area1(Rf,R,l) 
-%Computes the distance between the sepcified position vectors and sums over
-%it.
-area=trapz(l,vecnorm((Rf-R)));
-
 function [area,Jac,JC]=enclosed_area(Rf,R,l,Rfu1,Rfu2,Rfu3) 
+%Computes the distance between the sepcified position vectors and sums over
+%it and derivatives with respect to the state and Control paramters.
 area=0;
 Jc1=0;
 Jc2=0;

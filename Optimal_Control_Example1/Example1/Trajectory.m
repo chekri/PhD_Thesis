@@ -1,10 +1,38 @@
 function XYZ=Trajectory(u,Load,prevsol)
-% This function generates the states as a solution of boundary vlaue problem
-% with Dirirchlet boundary conditions at s=0 and natural boundary
-% conditions at the other end s=1. Control parameters are encoded in the
-% boundary conditions or the 
+% Outputs  : the CTCR configuration for the given control paramters by solving the boundary value problem.
+% Arguments: u      - Control paramters
+%            Load   -  Tip Load
+%            prevsol- Previous solution as an initial guess for the bvp
+%                     solver. If it is empty, solver starts from a straight
+%                     solution. 
+% The CTCR bvp equations can be found in the 6th and 9th chapters of the
+% thesis.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Control parameters
+
+%% System Paramters for tubes in CTCR
+%Intrinisic curvatures of the tubes in CTCR
+uhat11=0.5;
+uhat12=0.0;
+uhat13=0.0;
+      
+uhat21=0.8;
+uhat22=0.0;
+uhat23=0.0;
+
+uhat31=1.0;
+uhat32=0.0;
+uhat33=0.0;
+
+%Stiffnesses of the tubes in CTCR
+A1=1.0;
+A2=1.2;
+A3=1.4;
+C1=A1/1.3;
+C2=A2/1.3;
+C3=A3/1.3;
+
+%Control paramters
 Th1=u(1);
 Th2=u(2);
 Th3=u(3);
@@ -12,23 +40,20 @@ L1= u(4);
 L2= u(5);
 L3= u(6);
 
-%If inital guess is not provided, start from a stright solution
+
+%If inital guess is not given, start from a stright solution
 if size(prevsol,1)==0
     prevsol = bvpinit(linspace(0,1,10),@mat4init);
-    PrvSol = bvp4c(@(x,y)robot2rods(x,y,0,0,0,0.4,0.5,0.6,[0,0,0]), @(x,y)bcs(x,y,0,3.1415,0,0.4,0.5,0.6,Load), prevsol);
+    PrvSol = bvp4c(@(x,y)robot2rods(x,y,0,0,0,0.4,0.5,0.6,[0,0,0],uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), @(x,y)bcs(x,y,0,3.1415,0,0.4,0.5,0.6,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), prevsol);
     prevsol=PrvSol;
 else 
     prevsol=bvpinit(prevsol,[0 1]);
 end
+opts = bvpset('RelTol',1e-05,'AbsTol',1e-05);
 
-%opts = bvpset('RelTol',1e-9,'AbsTol',1e-6,'Stats','on');
-opts = bvpset('RelTol',1e-5);
-%opts=bvpset('Stats','on')
-XYZ=bvp4c(@(x,y)robot2rods(x,y,Th1,Th2,Th3,L1,L2,L3,Load), @(x,y)bcs(x,y,Th1,Th2,Th3,L1,L2,L3,Load), prevsol, opts);
+XYZ=bvp4c(@(x,y)robot2rods(x,y,Th1,Th2,Th3,L1,L2,L3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), @(x,y)bcs(x,y,Th1,Th2,Th3,L1,L2,L3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), prevsol, opts);
       
- function yinit = mat4init(s) 
-    % initial guess function: Straight-solution if the guess is not
-    % provided
+ function yinit = mat4init(s) % initial guess function
     L1=0.0001;
     L2=0.0001;
     L3=0.0001;
@@ -40,42 +65,10 @@ XYZ=bvp4c(@(x,y)robot2rods(x,y,Th1,Th2,Th3,L1,L2,L3,Load), @(x,y)bcs(x,y,Th1,Th2
     
     yinit(33) = L3*s;
     yinit(37) = 1.0;
-    
         
-function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
-      %The R.H.S of the CTCR-system
+function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3)
  
-      uhat11=0.5;%PAR(5)%1.0
-      uhat12=0.0;
-      uhat13=0.0;%PAR(3)
-      
-      uhat21=0.8;%PAR(6)%2.0
-      uhat22=0.0;
-      uhat23=0.0;%PAR(3)
-
-      uhat31=1.0;%2.0
-      uhat32=0.0;
-      uhat33=0.0;%PAR(3)
-  
- %     uhat11=0.5;%PAR(5)%1.0
-      uhat12=0.0;
-      uhat13=0.0;%PAR(3)
-      
- %     uhat21=1.5;%PAR(6)%2.0
-      uhat22=0.0;
-      uhat23=0.0;%PAR(3)
-
- %     uhat31=2.0;%2.0
-      uhat32=0.0;
-      uhat33=0.0;%PAR(3)
- 
-      
-     A1=1.0;
-     A2=1.2;
-     A3=1.4;
-     C1=A1/1.3;
-     C2=A2/1.3;
-     C3=A3/1.3;
+     
      
      L1=ul1;%PAR(1)
      L2=ul2;%PAR(4)
@@ -102,17 +95,6 @@ function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
       d23qn(3) =  entry21;
       d23qn(4) =  entry22;
 
-%       Components of d1
-
-      d21(1)= u(4)*u(4)-u(5)*u(5)-u(6)*u(6)+u(7)*u(7);
-      d21(2)= 2.0*u(4)*u(5)+2.0*u(6)*u(7);
-      d21(3)= 2.0*u(4)*u(6)-2.0*u(5)*u(7);
-
-%       Components of d2
-
-      d22(1)= 2.0*u(4)*u(5)-2.0*u(6)*u(7);
-      d22(2)= -u(4)*u(4)+u(5)*u(5)-u(6)*u(6)+u(7)*u(7);
-      d22(3)= 2.0*u(5)*u(6)+2.0*u(4)*u(7);
 
 %       Components of d3
 
@@ -172,19 +154,6 @@ function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
       entry13 =  2.0*(u(22)*u(28) - u(23)*u(29) - u(20)*u(30));
       entry14 =  2.0*(u(23)*u(28) + u(22)*u(29) - u(21)*u(30));
 
-%       Components of D_1[q] n
-
-      d11qn(1) =  entry11;
-      d11qn(2) =  -entry12;
-      d11qn(3) =  -entry13;
-      d11qn(4) =  entry14;
-
-%       Components of D_2[q] n
-
-      d12qn(1) =  entry12;
-      d12qn(2) =  entry11;
-      d12qn(3) =  -entry14;
-      d12qn(4) =  -entry13;
 
 %       Components of D_3[q] n
 
@@ -193,17 +162,6 @@ function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
       d13qn(3) =  entry11;
       d13qn(4) =  entry12;
 
-%       Components of d1
-
-      d11(1)= u(20)*u(20)-u(21)*u(21)-u(22)*u(22)+u(23)*u(23);
-      d11(2)= 2.0*u(20)*u(21)+2.0*u(22)*u(23);
-      d11(3)= 2.0*u(20)*u(22)-2.0*u(21)*u(23);
-
-%       Components of d2
-
-      d12(1)= 2.0*u(20)*u(21)-2.0*u(22)*u(23);
-      d12(2)= -u(20)*u(20)+u(21)*u(21)-u(22)*u(22)+u(23)*u(23);
-      d12(3)= 2.0*u(21)*u(22)+2.0*u(20)*u(23);
 
 %       Components of d3
       d13(1)= 2.0*u(20)*u(22)+2.0*u(21)*u(23);
@@ -272,7 +230,6 @@ function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
      
 	strain3(1) = m3(1)/(A1+A2+A3) + ub31;
 	strain3(2) = m3(2)/(A1+A2+A3) + ub32;
-	%strain3(3) = m3(3)/(C1+C2+C3) + ub33;  
 	strain3(3) = (m3(3)- u(46) -u(48)) /C1 + uhat13;  
 
 	F(31) = L3*(d33(1));
@@ -298,11 +255,10 @@ function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
 	F(48)= L3*(A3*uhat31*(A2*uhat21*sin(u(47)-u(45)) + A1*uhat11*sin(u(47))))/(A1+A2+A3) + A3*L3*uhat31*(m3(1)*sin(u(47)) - m3(2)*cos(u(47)))/(A1+A2+A3);
       
 
-function FB = bcs(u0,u1,Th1,Th2,Th3,L1,L2,L3,Load) 
-    %The boundary conditions of CTCR-system
-      nx=Load(1);%PAR(7)*0.0
-      ny=Load(2);%PAR(7)*sin(3.1415/4)
-      nz=Load(3);%PAR(7)*cos(3.1415/4)
+function FB = bcs(u0,u1,Th1,Th2,Th3,L1,L2,L3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3) 
+      nz=Load(1);%PAR(7)*0.0
+      nx=Load(2);%PAR(7)*sin(3.1415/4)
+      ny=Load(3);%PAR(7)*cos(3.1415/4)
       ang1=Th1;%PAR()
       ang2=Th2;%PAR(2)
       ang3=Th3;%PAR(12)

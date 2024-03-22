@@ -1,21 +1,57 @@
 function XYZ=Trajectory(u,Load,prevsol)
+% Outputs  : the CTCR configuration for the given control paramters by solving the boundary value problem.
+% Arguments: u      - Control paramters
+%            Load   -  Tip Load
+%            prevsol- Previous solution as an initial guess for the bvp
+%                     solver. If it is empty, solver starts from a straight
+%                     solution. 
+% The CTCR bvp equations can be found in the 6th and 9th chapters of the
+% thesis.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% System Paramters for tubes in CTCR
+%Intrinisic curvatures of the tubes in CTCR
+uhat11=0.5;
+uhat12=0.0;
+uhat13=0.0;
+      
+uhat21=0.8;
+uhat22=0.0;
+uhat23=0.0;
+
+uhat31=1.0;
+uhat32=0.0;
+uhat33=0.0;
+
+%Stiffnesses of the tubes in CTCR
+A1=1.0;
+A2=1.2;
+A3=1.4;
+C1=A1/1.3;
+C2=A2/1.3;
+C3=A3/1.3;
+
+%Control paramters
 Th1=u(1);
 Th2=u(2);
 Th3=u(3);
 L1= u(4);
 L2= u(5);
 L3= u(6);
+
+
 %If inital guess is not given, start from a stright solution
 if size(prevsol,1)==0
     prevsol = bvpinit(linspace(0,1,10),@mat4init);
-    PrvSol = bvp4c(@(x,y)robot2rods(x,y,0,0,0,0.4,0.5,0.6,[0,0,0]), @(x,y)bcs(x,y,0,3.1415,0,0.4,0.5,0.6,Load), prevsol);
+    PrvSol = bvp4c(@(x,y)robot2rods(x,y,0,0,0,0.4,0.5,0.6,[0,0,0],uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), @(x,y)bcs(x,y,0,3.1415,0,0.4,0.5,0.6,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), prevsol);
     prevsol=PrvSol;
 else 
     prevsol=bvpinit(prevsol,[0 1]);
 end
 opts = bvpset('RelTol',1e-05,'AbsTol',1e-05);
 
-XYZ=bvp4c(@(x,y)robot2rods(x,y,Th1,Th2,Th3,L1,L2,L3,Load), @(x,y)bcs(x,y,Th1,Th2,Th3,L1,L2,L3,Load), prevsol, opts);
+XYZ=bvp4c(@(x,y)robot2rods(x,y,Th1,Th2,Th3,L1,L2,L3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), @(x,y)bcs(x,y,Th1,Th2,Th3,L1,L2,L3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3), prevsol, opts);
       
  function yinit = mat4init(s) % initial guess function
     L1=0.0001;
@@ -30,41 +66,9 @@ XYZ=bvp4c(@(x,y)robot2rods(x,y,Th1,Th2,Th3,L1,L2,L3,Load), @(x,y)bcs(x,y,Th1,Th2
     yinit(33) = L3*s;
     yinit(37) = 1.0;
         
-function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
+function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3)
  
-      uhat11=0.5;%PAR(5)%1.0
-      uhat12=0.0;
-      uhat13=0.0;%PAR(3)
-      
-      uhat21=0.8;%PAR(6)%2.0
-      uhat22=0.0;
-      uhat23=0.0;%PAR(3)
-
-      uhat31=1.0;%2.0
-      uhat32=0.0;
-      uhat33=0.0;%PAR(3)
-  
- %     uhat11=0.5;%PAR(5)%1.0
-      uhat12=0.0;
-      uhat13=0.0;%PAR(3)
-      
- %     uhat21=1.5;%PAR(6)%2.0
-      uhat22=0.0;
-      uhat23=0.0;%PAR(3)
-
- %     uhat31=2.0;%2.0
-      uhat32=0.0;
-      uhat33=0.0;%PAR(3)
-  
-      
-      
-      
-     A1=1.0;
-     A2=1.2;
-     A3=1.4;
-     C1=A1/1.3;
-     C2=A2/1.3;
-     C3=A3/1.3;
+     
      
      L1=ul1;%PAR(1)
      L2=ul2;%PAR(4)
@@ -226,7 +230,6 @@ function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
      
 	strain3(1) = m3(1)/(A1+A2+A3) + ub31;
 	strain3(2) = m3(2)/(A1+A2+A3) + ub32;
-	%strain3(3) = m3(3)/(C1+C2+C3) + ub33;  
 	strain3(3) = (m3(3)- u(46) -u(48)) /C1 + uhat13;  
 
 	F(31) = L3*(d33(1));
@@ -252,7 +255,7 @@ function F = robot2rods(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
 	F(48)= L3*(A3*uhat31*(A2*uhat21*sin(u(47)-u(45)) + A1*uhat11*sin(u(47))))/(A1+A2+A3) + A3*L3*uhat31*(m3(1)*sin(u(47)) - m3(2)*cos(u(47)))/(A1+A2+A3);
       
 
-function FB = bcs(u0,u1,Th1,Th2,Th3,L1,L2,L3,Load) 
+function FB = bcs(u0,u1,Th1,Th2,Th3,L1,L2,L3,Load,uhat11,uhat12,uhat13,uhat21,uhat22,uhat23,uhat31,uhat32,uhat33,A1,A2,A3,C1,C2,C3) 
       nz=Load(1);%PAR(7)*0.0
       nx=Load(2);%PAR(7)*sin(3.1415/4)
       ny=Load(3);%PAR(7)*cos(3.1415/4)

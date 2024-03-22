@@ -1,15 +1,23 @@
 function [F,jac] = CTCR(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
-      uhat11=0.5;%PAR(5)%1.0
+% Output: Gives the equilibrium equations (RHS of Hamiltonian formulation of CTCR) of CTCR and its Jacobi equations 
+% arguments: Arclength s
+%            State u
+%            Rotation paramters th1,th2,th3
+%            Length paramters ul1,ul2,ul3
+%            Tip load "Load"  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Specify CTCR parameters here. Intrinsic curvatures and Stiffness of CTCR tubes
+      uhat11=0.5;
       uhat12=0.0;
-      uhat13=0.0;%PAR(3)
+      uhat13=0.0;
       
-      uhat21=0.8;%PAR(6)%2.0
+      uhat21=0.8;
       uhat22=0.0;
-      uhat23=0.0;%PAR(3)
+      uhat23=0.0;
 
-      uhat31=1.0;%2.0
+      uhat31=1.0;
       uhat32=0.0;
-      uhat33=0.0;%PAR(3)
+      uhat33=0.0;
   
       
      A1=1.0;
@@ -19,9 +27,9 @@ function [F,jac] = CTCR(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
      C2=A2/1.3;
      C3=A3/1.3;
      
-     L1=ul1;%PAR(1)
-     L2=ul2;%PAR(4)
-     L3=ul3;%PAR(10)
+     L1=ul1;
+     L2=ul2;
+     L3=ul3;
       	
       m2(1) = (u(7)*u(8) + u(6)*u(9) - u(5)*u(10) - u(4)*u(11))/2.0;
       m2(2) = (-u(6)*u(8) + u(7)*u(9) + u(4)*u(10) - u(5)*u(11))/2.0;
@@ -620,8 +628,6 @@ function [F,jac] = CTCR(s,u,th1,th2,th3,ul1,ul2,ul3,Load)
 	at271=(-A2*u(38)*(-uhat21*sin(u(45))- uhat22*cos(u(45))) - A2*u(39)*(uhat21*cos(u(45))- uhat22*sin(u(45))) )/(2.0*(A1+A2+A3));
 	at272=(-A3*u(38)*(-uhat31*sin(u(47))- uhat32*cos(u(47))) - A3*u(39)*(uhat31*cos(u(47))- uhat32*sin(u(47))) )/(2.0*(A1+A2+A3));
 
-	%bt271= -u(40)*(-C2*(1/C1 + 1/C2) -C3*(1/C1))/(2.0*(C1+C2+C3))  
-	%bt272= -u(40)*(-C2*(1/C1)- C3*(1/C1 + 1/C3))/(2.0*(C1+C2+C3)) 
 	bt271= u(40)/(2.0*C1);
 	bt272= u(40)/(2.0*C1);
 	

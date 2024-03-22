@@ -6,30 +6,7 @@ function [x,y,z]=tubeplot(curve,r,n,ct,color)
 % If no output are requested, the tube is plotted.
 % Otherwise, you can plot by using surf(x,y,z);
 %
-% Example of use:
-% t=linspace(0,2*pi,50);
-% tubeplot([cos(t);sin(t);0.2*(t-pi).^2],0.1);
-% daspect([1,1,1]); camlight;
-%
-% Arguments:
-% curve: [3,N] vector of curve data
-% r      the radius of the tube
-% n      number of points to use on circumference. Defaults to 8
-% ct     threshold for collapsing points. Defaults to r/2 
-%
-% The algorithms fails if you have bends beyond 90 degrees.
-% Janus H. Wesenberg, july 2004
-  if nargin<3 || isempty(n), n=8;
-     if nargin<2, error('Give at least curve and radius');
-    end;
-  end;
-  if size(curve,1)~=3
-    error('Malformed curve: should be [3,N]');
-  end;
-  if nargin<4 || isempty(ct)
-    ct=0.5*r;
-  end
-  
+
   %Collapse points within 0.5 r of each other
   npoints=1;
   for k=2:(size(curve,2)-1)
@@ -76,8 +53,7 @@ function [x,y,z]=tubeplot(curve,r,n,ct,color)
   y=squeeze(xyz(2,:,:));
   z=squeeze(xyz(3,:,:));
   
-  %... and plot:
-  %C = 1*x.*y
+
   r=color(1);
   g=color(2);
   b=color(3);
