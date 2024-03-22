@@ -1,4 +1,4 @@
-# Instructions for Using Codes and Tools in my PhD Thesis:
+# Instructions for Using Codes and Tools in this Folder:
 These are the codes used in the examples of my PhD thesis. These programs are written in AUTO-07p, Python3 and Matlab-R2023b. The examples in part 1 and Part 2 of the thesis pertaining to numerical continuation are performed using AUTO-07p software package. 
 
 ## AUTO-07p Configuration
