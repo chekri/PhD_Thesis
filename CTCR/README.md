@@ -13,7 +13,7 @@ The folder "CTCRwithJacobi_equations" includes 4 script files
 
 1.***Example1.auto***: (section 7.1.2 of thesis)
 
-2.***Example1_load.auto***: (7.1.3 of thesis) 
+2.***Example1_load.auto***: (section 7.1.3 of thesis) 
 
 3.***Example2.auto***: (section 7.2.1 of thesis)
 
