@@ -1,8 +1,8 @@
 This folder contains the codes used for optimization in Example 2 (Section: "Fixed Tip Orientation with Adjustable Position") in Chapter 9 of the thesis. The CTCR maneuvers such that its tip moves to the target point along a prescribed path (straight line) and its orientation is constrained. The orientation is constrained either by penalizing its deviation or using path constraints.
 
-1.***Example2a_inverted***: CTCR maneuver with its orientation constrained by penalizing the deviation.
+1.***Example2a***: CTCR maneuver with its orientation constrained by penalizing the deviation.
 
-2.***Example2b_inverted***: CTCR maneuver with its orientation constrained by path constraints.
+2.***Example2b***: CTCR maneuver with its orientation constrained by path constraints.
 
 3.***Example2c***: CTCR maneuvers to a farther target point with its orientation constrained by path constraints.
 
