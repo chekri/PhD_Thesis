@@ -9,7 +9,6 @@ function XYZ=Trajectory(u,Load,prevsol)
 % thesis.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 %% System Paramters for tubes in CTCR
 %Intrinisic curvatures of the tubes in CTCR
 uhat11=0.5;

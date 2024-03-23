@@ -4,7 +4,7 @@ function [Rt,Jac]=Orientation_pursuit(Ori,U,Tr,P)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 B0=[0,0];
-
+mu=1.0;
 
 %Tip orientation quaternions
 qend1=Tr.y(20,end);
@@ -18,7 +18,7 @@ d32=2*(qend2*qend3 - qend1*qend4);
 d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 
 %Distance between Target and the Robot Tip
-Rt= dot([d31,d32,d33],Ori);
+Rt= mu*dot([d31,d32,d33],Ori);
 
 %% Gradient evaluation
 % Boundary terms at s=0
@@ -40,7 +40,7 @@ for i=[1:6]
     d32=2*(qend2*qend3 - qend1*qend4);
     d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 
-    tar_diff= dot([d31,d32,d33],Ori);
+    tar_diff= mu*dot([d31,d32,d33],Ori);
     Jac(i)=(tar_diff-Rt)/e;
     Dbdc(i,:)=[p2(end,16)/e,p3(end,18)/e];   
 end
@@ -55,7 +55,7 @@ d31=2*(qend1*qend3 + qend2*qend4);
 d32=2*(qend2*qend3 - qend1*qend4);
 d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 
-tar_diff= dot([d31,d32,d33],Ori) ;
+tar_diff= mu*dot([d31,d32,d33],Ori) ;
 Jac_y0(1)=(tar_diff-Rt)/e;
 
 [y23,y22,y21,t30,t20,t10]=IVP_trajectory(IC'+[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,e],U);%Mu2
@@ -69,7 +69,7 @@ d31=2*(qend1*qend3 + qend2*qend4);
 d32=2*(qend2*qend3 - qend1*qend4);
 d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 
-tar_diff= dot([d31,d32,d33],Ori) ;
+tar_diff= mu*dot([d31,d32,d33],Ori) ;
 Jac_y0(2)=(tar_diff-Rt)/e; %Internal derivatives
 
 %Evaluate the gradients from internal derivatives (Using IVPs- Chpater 9 of the thesis)

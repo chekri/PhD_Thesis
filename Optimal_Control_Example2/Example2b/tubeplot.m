@@ -1,11 +1,7 @@
 function [x,y,z]=tubeplot(curve,r,n,ct,color)
 % Usage: [x,y,z]=tubeplot(curve,r,n,ct)
-% 
-% Tubeplot constructs a tube, or warped cylinder, along
-% any 3D curve, much like the build in cylinder function.
-% If no output are requested, the tube is plotted.
-% Otherwise, you can plot by using surf(x,y,z);
-
+%Plots tubes by generating surface plot
+  
   %Collapse points within 0.5 r of each other
   npoints=1;
   for k=2:(size(curve,2)-1)
@@ -52,7 +48,6 @@ function [x,y,z]=tubeplot(curve,r,n,ct,color)
   y=squeeze(xyz(2,:,:));
   z=squeeze(xyz(3,:,:));
   
-
   r=color(1);
   g=color(2);
   b=color(3);

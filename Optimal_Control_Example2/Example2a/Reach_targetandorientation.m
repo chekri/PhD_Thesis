@@ -5,7 +5,8 @@ function [Rt,Jac]=Reach_targetandorientation(Rtar,Ori,U,Tr,Load,mu,nu)
 %            Load - Tip Load Load
 %            Ori  - Target Orientation         
 %            Tr   - CTCR state
-%
+%            mu,nu   - Penalization weights for prioritizing Postion
+%            pursuit and Orientation pursuit respectively. (To prioritize mong them)
 %Gradient evaluated using finite differneces ("using IVPs" see Chapter 9 in thesis)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 B0=[0,0];
@@ -14,20 +15,17 @@ xtarget=Rtar(1);
 ytarget=Rtar(2);
 ztarget=Rtar(3);
 %%%%%%%%%%%%%%%%%
-
-%Tip orientation quaternions
+% Determine Tip tangent (d31,d32,d33)
 qend1=Tr.y(20,end);
 qend2=Tr.y(21,end);
 qend3=Tr.y(22,end);
 qend4=Tr.y(23,end);
 
-% Tip tangent (d31,d32,d33)
 d31=2*(qend1*qend3 + qend2*qend4);
 d32=2*(qend2*qend3 - qend1*qend4);
 d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Distance between Target and the Robot Tip
-Rt=nu*norm([Tr.y(17,end),Tr.y(18,end),Tr.y(19,end)]-[xtarget,ytarget,ztarget]) + mu*dot([d31,d32,d33],Ori);
+Rt=mu*norm([Tr.y(17,end),Tr.y(18,end),Tr.y(19,end)]-[xtarget,ytarget,ztarget]) + nu*dot([d31,d32,d33],Ori);
 %%%%%%%%%%%%%%%%
 %% Gradient evaluation
 % Boundary terms at s=0
@@ -49,7 +47,7 @@ for i=[1:6]
     d32=2*(qend2*qend3 - qend1*qend4);
     d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 
-    tar_diff=nu*norm([p1(end,1),p1(end,2),p1(end,3)] - [xtarget,ytarget,ztarget]) + mu*dot([d31,d32,d33],Ori);
+    tar_diff=mu*norm([p1(end,1),p1(end,2),p1(end,3)] - [xtarget,ytarget,ztarget]) + nu*dot([d31,d32,d33],Ori);
     Jac(i)=(tar_diff-Rt)/e;                %Internal derivatives
     Dbdc(i,:)=[p2(end,16)/e,p3(end,18)/e]; %Internal derivatives  
 end
@@ -67,7 +65,7 @@ d31=2*(qend1*qend3 + qend2*qend4);
 d32=2*(qend2*qend3 - qend1*qend4);
 d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 
-tar_diff=nu*norm([y11(end,1),y11(end,2),y11(end,3)] - [xtarget,ytarget,ztarget]) + mu*dot([d31,d32,d33],Ori);
+tar_diff=mu*norm([y11(end,1),y11(end,2),y11(end,3)] - [xtarget,ytarget,ztarget]) + nu*dot([d31,d32,d33],Ori);
 
 Jac_y0(1)=(tar_diff-Rt)/e; % Internal derivatives
 
@@ -82,7 +80,7 @@ d31=2*(qend1*qend3 + qend2*qend4);
 d32=2*(qend2*qend3 - qend1*qend4);
 d33=-qend1*qend1 - qend2*qend2 + qend3*qend3 + qend4*qend4;
 
-tar_diff=nu*norm([y21(end,1),y21(end,2),y21(end,3)] - [xtarget,ytarget,ztarget]) + mu*dot([d31,d32,d33],Ori) ;
+tar_diff=mu*norm([y21(end,1),y21(end,2),y21(end,3)] - [xtarget,ytarget,ztarget]) + nu*dot([d31,d32,d33],Ori) ;
 Jac_y0(2)=(tar_diff-Rt)/e; % Internal derivatives
 
 %Evaluate the gradients from internal derivatives (Using IVPs- Chpater 9 of the thesis)

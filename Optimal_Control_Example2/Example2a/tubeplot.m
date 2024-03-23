@@ -6,7 +6,6 @@ function [x,y,z]=tubeplot(curve,r,n,ct,color)
 % If no output are requested, the tube is plotted.
 % Otherwise, you can plot by using surf(x,y,z);
 
-  %Collapse points within 0.5 r of each other
   npoints=1;
   for k=2:(size(curve,2)-1)
     if norm(curve(:,k)-curve(:,npoints))>ct;
@@ -52,7 +51,8 @@ function [x,y,z]=tubeplot(curve,r,n,ct,color)
   y=squeeze(xyz(2,:,:));
   z=squeeze(xyz(3,:,:));
   
-
+  %... and plot:
+  %C = 1*x.*y
   r=color(1);
   g=color(2);
   b=color(3);
